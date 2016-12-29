@@ -1,0 +1,50 @@
+#main-div .about-j1{  
+	padding: 50px 0 80px;
+	width: 1140px;
+	min-height:230px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+#p1-banner{
+	float: right;
+	width: 165px;
+}
+
+#pp1-div{
+	float: left;
+	width: 530px;
+	clear:left;
+}
+#pp2-div{
+	float: left;
+	width: 530px;
+	clear:left;
+}
+#pp3-div{
+	float: left;
+	width: 530px;
+	clear:left;
+}
+.clearfix{
+	clear: both;
+}
+.more-title{
+	cursor: pointer;
+}
+
+.about-j2 {
+    background-size: cover;
+    padding: 90px 0 130px;
+    text-align: left;
+}
+
+#p3-banner{
+	float: right;
+	width: 165px;
+}
+
+.about-j3 {
+    padding: 70px 0 60px;
+    text-align: left;
+}

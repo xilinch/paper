@@ -1,0 +1,42 @@
+.all_wrap{width:100%;}
+.wrap{width:1170px;margin:0 auto;}
+
+/*头部*/
+
+
+.content{width:576px;height:325px;background-size:cover;margin:0 auto;position:relative;}
+.content .tm_bd{border:1px solid #fff;position:absolute;border-radius:5px;box-shadow:1px 1px 12px #666;}
+.content .tm_bg{width:574px;height:323px;filter:alpha(opacity=60);opacity:0.6;background:#cdcdcd;}
+
+.content .con_bg{position:absolute;width:556px;height:305px;margin-left:10px;background:url(../images/login_cont.jpg) no-repeat center center;margin-top:10px;}
+.content h3{padding-top:10px;color:#1a7ccf;font:22px/76px "微软雅黑";text-align:center;}
+.content_main{margin-right:46px;padding-top:10px;width:252px;}
+.content_main p{height:36px;margin-bottom:13px;}
+.content_main p.user_color{background:url(../images/user_bg1.jpg) no-repeat 67px top;}
+.content_main p.password_color{background:url(../images/password_bg1.jpg) no-repeat 67px top;}
+.content_main p span{display:block;width:67px;float:left;}
+.content_main p input{float:left;width:148px;height:33px;background:none;outline:none;padding-left:34px;border:1px solid #e7e6e6;}
+.user{background:url(../images/user_bg.jpg) no-repeat 67px top;}
+.password{background:url(../images/password_bg.jpg) no-repeat 67px top;}
+.content_main p.yzm input{width:78px;height:28px;border:1px solid #e7e6e6;border-radius:5px;padding-left:6px;}
+.content_main p em{display:block;float:left;margin-left:10px;}
+.content_main p.btn{margin-right:-14px;overflow:hidden;}
+.content_main p.btn input{width:118px;height:33px;margin-right:14px;}
+.content_main p.btn .login_btn{background:url(../images/login_btn.jpg) no-repeat;}
+.content_main p.btn .reset_btn{background:url(../images/reset_btn.jpg) no-repeat;}
+footer{height:42px;background:#2d78cc;font:16px/42px "微软雅黑";color:#ffffff;margin-top:75px;text-align:center; }
+@media screen and (min-width: 400px) and (max-width: 1919px){
+.login_bg{height:auto;width:100%;background:url(../images/login.jpg) no-repeat;background-size:cover;}
+header{height:104px;padding-top:62px;text-align:center;}
+header h3{color:#007cc2;font: bold 30px/104px "微软雅黑";}
+footer{margin-top:75px;}
+}
+
+@media screen and (min-width:1920px){
+header h3{color:#007cc2;font: bold 40px/104px "微软雅黑";}
+.login_bg{height:auto;width:100%;background:url(../images/login.jpg) no-repeat center center;}	
+header{height:104px;padding-top:112px;text-align:center;}
+.content{margin-top:130px;}
+footer{margin-top:247px;}
+	}
+	

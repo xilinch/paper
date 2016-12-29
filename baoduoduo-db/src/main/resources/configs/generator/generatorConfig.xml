@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+  <properties resource="configs/jdbc.properties"/>
+
+  <context id="Mysql" targetRuntime="MyBatis3Simple" defaultModelType="flat">
+  	<property name="autoDelimitKeywords" value="true" />
+    <property name="beginningDelimiter" value="`"/>
+    <property name="endingDelimiter" value="`"/>
+    <property name="javaFileEncoding" value="UTF-8"/>
+	<!-- 序列化 -->
+	<plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
+    
+    <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+      <property name="mappers" value="tk.mybatis.mapper.common.Mapper"/>
+    </plugin>
+
+    <jdbcConnection driverClass="${jdbc.driverClassName}"
+                    connectionURL="${jdbc.url}"
+                    userId="${jdbc.username}"
+                    password="${jdbc.password}">
+    </jdbcConnection>
+
+    <javaModelGenerator targetPackage="${targetModelPackage}" targetProject="${targetJavaProject}"/>
+
+    <sqlMapGenerator targetPackage="${targetXMLPackage}"  targetProject="${targetResourcesProject}"/>
+
+    <javaClientGenerator targetPackage="${targetMapperPackage}" targetProject="${targetJavaProject}" type="XMLMAPPER" /> 
+
+
+
+	
+	<table tableName="%" >
+		<!-- <ignoreColumn column="update_time"/>
+		<ignoreColumn column="create_time"/>
+		<ignoreColumn column="operator"/>
+		<ignoreColumn column="id"/> -->
+		<property name="rootClass" value="com.baoduoduo.db.model.BaseVO"/>
+      	<generatedKey column="id" sqlStatement="Mysql" identity="true" />
+	</table>
+	
+<!-- 
+    <table tableName="cmpy_image_news" >
+      	<property name="rootClass" value="com.baoduoduo.db.model.BaseVO"/>
+      	<generatedKey column="id" sqlStatement="Mysql" identity="true" />
+    </table>
+     -->
+  </context>
+</generatorConfiguration>

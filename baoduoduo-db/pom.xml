@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.baoduoduo-root</groupId>
+    <artifactId>baoduoduo-root</artifactId>
+    <version>0.0.1</version>
+  </parent>
+  <groupId>com.baoduoduo</groupId>
+  <artifactId>baoduoduo-db</artifactId>
+  <version>0.0.1</version>
+  <name>baoduoduo-db</name>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    
+    <targetJavaProject>${basedir}/src/main/java</targetJavaProject>
+	<targetMapperPackage>com.baoduoduo.db.mapper</targetMapperPackage>
+	<targetModelPackage>com.baoduoduo.db.model</targetModelPackage>
+	<!--  XML生成路径  -->
+    <targetResourcesProject>${basedir}/src/main/resources/configs/mapper</targetResourcesProject>
+    <targetXMLPackage>baoduoduo</targetXMLPackage>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    
+    <!--必须依赖-->
+    <dependency>
+		<groupId>javax.persistence</groupId>
+		<artifactId>persistence-api</artifactId>
+		<version>1.0.2</version>
+	</dependency>
+	
+	<dependency>
+		<groupId>com.alibaba</groupId>
+		<artifactId>fastjson</artifactId>
+		<version>1.2.6</version>
+		<optional>true</optional>
+	</dependency>
+	
+	
+	<!-- http://mvnrepository.com/artifact/org.mybatis/mybatis -->
+	<dependency>
+	    <groupId>org.mybatis</groupId>
+	    <artifactId>mybatis</artifactId>
+	    <version>${mybatis.version}</version>
+	</dependency>
+	
+	<dependency>
+		<groupId>tk.mybatis</groupId>
+		<artifactId>mapper</artifactId>
+		<version>${mapper.version}</version>
+	</dependency>
+       
+       <dependency>
+		<groupId>com.github.pagehelper</groupId>
+		<artifactId>pagehelper</artifactId>
+		<version>${mapper.pagehelper.version}</version>
+	</dependency>
+  </dependencies>
+  
+  <build>
+  	<finalName>${project.name}</finalName>
+  	<plugins>
+		<!-- mvn mybatis-generator:generate -->
+		<plugin>
+               <groupId>org.mybatis.generator</groupId>
+               <artifactId>mybatis-generator-maven-plugin</artifactId>
+               <version>1.3.2</version>
+               <configuration>
+                   <configurationFile>${basedir}/src/main/resources/configs/generator/generatorConfig.xml</configurationFile>
+                   <overwrite>true</overwrite>
+                   <verbose>true</verbose>
+               </configuration>
+               <dependencies>
+                   <dependency>
+					<groupId>mysql</groupId>
+					<artifactId>mysql-connector-java</artifactId>
+					<version>5.1.35</version>
+				</dependency>
+
+                  <dependency>
+                      <groupId>tk.mybatis</groupId>
+                      <artifactId>mapper</artifactId>
+                      <version>${mapper.version}</version>
+                  </dependency>
+                   
+               </dependencies>
+           </plugin>
+       </plugins>
+  </build>
+  
+</project>

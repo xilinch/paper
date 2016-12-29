@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baoduoduo.db.mapper.MenuMapper">
+	<resultMap type="com.baoduoduo.db.model.MenuVO" id="MenuMap">
+		<result property="menuid" column="groupId" jdbcType="INTEGER"/>
+		<result property="menuname" column="groupName" jdbcType="VARCHAR"/>
+		<result property="icon" column="icon" jdbcType="VARCHAR"/>
+		<association property="subMenus" column="{groupId=groupId,userId=userId}" javaType="List" select="querySubMenu">
+			
+		</association>
+	</resultMap>
+	
+	<resultMap type="com.baoduoduo.db.model.MenuVO" id="SubMenuMap">
+		<result property="menuid" column="pvgId" jdbcType="INTEGER"/>
+		<result property="menuname" column="pvgName" jdbcType="VARCHAR"/>
+		<result property="icon" column="icon" jdbcType="VARCHAR"/>
+		<result property="url" column="pageUrl" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<!-- 查询一级菜单 -->
+	<select id="queryMenu" resultMap="MenuMap">
+		select apg.id as groupId,apg.group_name as groupName,aup.user_id as userId,apg.icon
+		from admin_user_privileges aup
+			left join admin_privileges ap on aup.pvg_id=ap.id
+			left join admin_privileges_group apg on ap.group_id=apg.id
+		where
+			aup.user_id = #{userId}
+			and aup.valid=1
+			and ap.valid=1
+			and apg.valid=1
+		group by apg.id,apg.group_name
+		order by apg.serial_number asc,apg.id desc
+	</select>
+	
+	<!-- 查询子菜单 -->
+	<select id="querySubMenu" resultMap="SubMenuMap">
+		select ap.id as pvgId,ap.name as pvgName,ap.icon,ap.url
+		from admin_user_privileges aup
+			left join admin_privileges ap on aup.pvg_id=ap.id
+		where 
+			ap.group_id=#{groupId}
+			and aup.user_id=#{userId}
+			and aup.valid=1
+			and ap.valid=1
+		order by ap.serial_number asc,ap.id desc
+	</select>
+</mapper>

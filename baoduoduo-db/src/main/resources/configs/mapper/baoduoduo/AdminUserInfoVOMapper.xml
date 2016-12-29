@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baoduoduo.db.mapper.AdminUserInfoVOMapper">
+  <resultMap id="AdminUserInfoVOMap" type="com.baoduoduo.db.model.AdminUserInfoVO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="login_code" jdbcType="VARCHAR" property="loginCode" />
+    <result column="valid" jdbcType="INTEGER" property="valid" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="role_desc" jdbcType="VARCHAR" property="roleDesc" />
+  </resultMap>
+  
+	<select id="queryAdminUserInfoVO" resultMap="AdminUserInfoVOMap">
+		select aui.*,aur.role_id,ar.role_desc
+		from admin_user_info aui 
+		left join admin_user_role aur on aui.id = aur.user_id
+		left join admin_role ar on aur.role_id = ar.id
+		<where>
+			aui.valid = 1
+			and aur.valid = 1
+			and ar.valid = 1
+			<if test="id != null">
+				and aui.id = #{id}
+			</if>
+			<if test="userName != null and userName != ''">
+				and aui.user_name like CONCAT('%',#{userName},'%')
+			</if>
+		</where>
+		order by id desc
+		limit #{start},#{limit}
+	</select>
+	
+	<select id="queryAdminUserInfoVOTotalCount" resultType="long">
+		select count(*)
+		from admin_user_info aui
+		<where>
+			aui.valid = 1
+			<if test="id != null">
+				and aui.id = #{id}
+			</if>
+			<if test="userName != null and userName != ''">
+				and aui.user_name like CONCAT('%',#{userName},'%')
+			</if>
+		</where>
+	</select>
+</mapper>

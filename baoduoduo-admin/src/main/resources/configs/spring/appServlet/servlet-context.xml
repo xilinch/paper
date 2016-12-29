@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+		
+	
+	<!-- 打开SpringMVC注解支持 -->
+	<!-- 
+	<mvc:annotation-driven validator="validator"/>
+	 -->
+	 <mvc:annotation-driven/>
+
+	<!-- 当HTTP GET请求地址是/resources/**下的资源时候，不需要DispatchServlet处理，
+		直接转到 ${webappRoot}/resources目录下的资源，有利于提高静态资源访问效率 -->
+	<mvc:resources mapping="/resources/**" location="/resources/" />
+	<mvc:resources location="/resources/images/favicon.ico" mapping="/favicon.ico"/>
+
+	<!-- 视图资源配置，处理控制器组件返回的view，自动加上前缀及后缀 -->
+	<!-- <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:prefix="/WEB-INF/views/" p:suffix=".jsp" /> -->
+	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="contentNegotiationManager">
+			<bean class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+				<property name="mediaTypes">
+					<map>
+						<entry key="json" value="application/json"/>
+						<entry key="xml" value="application/xml"/>
+						<entry key="html" value="text/html"/>
+					</map>
+				</property>
+			</bean>
+		</property>
+		<property name="viewResolvers">
+			<list>
+				<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+					<property name="prefix" value="/views/"/>
+					<property name="suffix" value=".jsp"/>
+				</bean>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 完成请求和注解POJO的映射 -->
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" />
+	
+	<!-- 扫描所有controller组件 -->
+	<context:component-scan base-package="com.baoduoduo.admin.controller" />
+	
+	<!-- 配置web应用的默的视图为 -->
+	<mvc:view-controller path="/" view-name="/public/login.html" />
+	
+	
+	<!-- 国际化资源 -->
+	<!-- 
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename" value="messages" />
+	</bean>
+	 -->
+	
+	<!-- @Controller支持打开  Enables the Spring MVC @Controller programming model -->
+	<!-- 
+	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="validationMessageSource" ref="messageSource"/>
+    </bean>    
+	 -->
+	 
+    <!-- 文件上传Enable file upload functionality -->
+    <!-- <bean class="org.springframework.web.multipart.support.StandardServletMultipartResolver" id="multipartResolver"/> -->
+	 <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/> 
+
+	<!-- 打开多语言动态支持 -->
+	<!-- <bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+		<property name="defaultLocale" value="en" />
+	</bean> -->
+	
+	<!-- 
+	<bean id="localeResolver"
+      class="org.springframework.web.servlet.i18n.CookieLocaleResolver"/>
+	
+ 	<mvc:interceptors>
+		<bean id="localeChangeInterceptor"
+			class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+			<property name="paramName" value="lang" />
+		</bean>
+ 	</mvc:interceptors>
+ 	 -->
+ 	
+ 	<!-- 异常处理  , 暂不处理
+ 	<bean id="exceptionResolver"
+	    class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+	    <property name="defaultErrorView">
+	       <value>/public/common/500</value>
+	    </property>
+	 
+	    <property name="exceptionMappings">
+	       <props>
+	 -->
+	       		<!-- 用key作为名字进行异常匹配，key可以是异常的name，但不能使用通配符，值是异常转到的视图名，注意不是url！ -->
+	 <!--
+	           <prop key="BissinessException">/public/common/bizError</prop>
+	           <prop key="AccessDeniedException">/public/common/403</prop>
+	           <prop key="java.lang.RuntimeException">/public/common/rtError</prop>
+	       </props>
+	    </property>
+	</bean>
+	-->
+	<!-- 切面拦截, 暂时不考虑做了 -->
+	<!-- Spring AOP 拦截器记录操作日志配置 -->
+<!-- 
+	<bean name="logBefore" class="cn.hrx.log.advice.LogBeforeAdvice" />
+	<bean name="logAfter" class="cn.hrx.log.advice.LogAfterAdvice" />
+	<bean name="logThrows" class="cn.hrx.log.advice.LogThrowsAdvice" />
+	<bean name="loggerAutoProxy"
+		class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<property name="beanNames">
+			<list>
+				<value>*Controller</value>
+			</list>
+		</property>
+		<property name="interceptorNames">
+			<list>
+-->
+				<!--<value>logBefore</value>	 调用方法之前调用的拦截器 -->
+				<!--<value>logAfter</value>		 调用方法之后调用的拦截器，在方法抛出异常之后，logAfter拦截器将不会执行 -->
+				<!-- <value>logThrows</value>	调用方法抛出异常之后调用的拦截器-->
+<!--		</list>
+		</property>
+	</bean>
+-->
+</beans>

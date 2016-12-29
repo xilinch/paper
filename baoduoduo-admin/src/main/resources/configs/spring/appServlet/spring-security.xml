@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns:c="http://www.springframework.org/schema/c"
+     xmlns="http://www.springframework.org/schema/security"
+     xsi:schemaLocation="
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+	
+	<!-- 打开@PreFilter,@PreAuthorize, @PostFilter, @PostAuthorize等注解支持（注意：放在这里只会对Service层的方法生效） -->
+	<global-method-security pre-post-annotations="enabled" />
+	
+	<http pattern="/resources/**" security="none"></http>
+	<http pattern="/favicon.ico" security="none"></http>
+	<http use-expressions="true" entry-point-ref="authenticationProcessingFilterEntryPoint">
+		<logout logout-success-url="/public/login.html" logout-url="/public/logout.html"/>
+		<access-denied-handler error-page="/public/error/403.html"/>
+	    <intercept-url pattern="/" access="permitAll" />
+	    <intercept-url pattern="/public/**" access="permitAll" />
+	    <intercept-url pattern="/secure/**" access="fullyAuthenticated" />
+	    <intercept-url pattern="/**" access="denyAll" />
+	    <custom-filter ref="validateCodeUsernamePasswordAuthenticationFilter" position="FORM_LOGIN_FILTER"/>
+	</http>
+	
+	
+	<!-- 整合登陆验证码的认证 -->
+	<beans:bean id="validateCodeUsernamePasswordAuthenticationFilter" class="com.baoduoduo.admin.utils.ValidateCodeUsernamePasswordAuthenticationFilter">
+		<!-- 处理登录的action  -->
+        <beans:property name="filterProcessesUrl" value="/j_spring_security_check"/>
+        <!-- 验证成功后的处理   -->
+        <beans:property name="authenticationSuccessHandler" ref="loginLogAuthenticationSuccessHandler"/>
+        <!-- 验证失败后的处理 -->
+        <beans:property name="authenticationFailureHandler" ref="simpleUrlAuthenticationFailureHandler"/>
+        <beans:property name="authenticationManager" ref="authenticationManager"/>
+	</beans:bean>
+	
+	<!-- 登录成功 -->
+	<beans:bean id="loginLogAuthenticationSuccessHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler">
+		<beans:property name="defaultTargetUrl" value="/secure/index"/>
+	</beans:bean>
+	
+	<!-- 登录失败 -->
+	<beans:bean id="simpleUrlAuthenticationFailureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+		<beans:property name="defaultFailureUrl" value="/public/loginFailed"/>
+	</beans:bean>
+	
+	<!-- 登录入口点 -->
+	<beans:bean id="authenticationProcessingFilterEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+		<beans:constructor-arg value="/public/login.html"/>
+	</beans:bean>
+	
+	<beans:bean id="zxxzxjEncoder" class="com.baoduoduo.admin.utils.ZxxzxjDESPasswordEncoder"/>
+	
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider user-service-ref="adminUserDetailsService">
+			<password-encoder ref="zxxzxjEncoder"/>
+		</authentication-provider>
+	</authentication-manager>
+	
+	<!-- spring security 4.0 set header -->
+	<!-- <http>
+	    <headers>
+	        <header ref="xFrameOptionsHeaderWriter" />
+	    </headers>
+	</http>
+	<beans:bean id="xFrameOptionsHeaderWriter" class="org.springframework.security.web.header.writers.DelegatingRequestMatcherHeaderWriter">
+	    
+	    <beans:constructor-arg> 
+	        <beans:bean class="org.springframework.security.web.util.matcher.NegatedRequestMatcher">
+	            <beans:constructor-arg>
+	                <beans:bean class="org.springframework.security.web.util.matcher.OrRequestMatcher">
+	                    <beans:constructor-arg>
+	                        <beans:list>
+	                            <beans:bean class="org.springframework.security.web.util.matcher.AntPathRequestMatcher" c:pattern="/public/**" />
+	                            <beans:bean class="org.springframework.security.web.util.matcher.AntPathRequestMatcher" c:pattern="/**/another-path/**" />
+	                        </beans:list>
+	                    </beans:constructor-arg>
+	                </beans:bean>
+	            </beans:constructor-arg>
+	        </beans:bean>
+	    </beans:constructor-arg>
+		
+	    <beans:constructor-arg>
+	        <beans:bean  class="org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter" c:frameOptionsMode="SAMEORIGIN" />
+	    </beans:constructor-arg>
+	</beans:bean>
+	 -->
+</beans:beans>

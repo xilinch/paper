@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baoduoduo.db.mapper.AdminUserInfoMapper">
+  <resultMap id="BaseResultMap" type="com.baoduoduo.db.model.AdminUserInfo">
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="login_code" jdbcType="VARCHAR" property="loginCode" />
+    <result column="valid" jdbcType="INTEGER" property="valid" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="operator" jdbcType="VARCHAR" property="operator" />
+    <result column="password" jdbcType="BINARY" property="password" />
+  </resultMap>
+  
+  <insert id="insertReturnPrimaryKey" useGeneratedKeys="true" keyProperty="id">
+  	insert into admin_user_info(user_name,login_code,valid,create_time,update_time,password,operator)
+  	value(#{userName},#{loginCode},#{valid},#{createTime},#{updateTime},#{password},#{operator})
+  </insert>
+</mapper>

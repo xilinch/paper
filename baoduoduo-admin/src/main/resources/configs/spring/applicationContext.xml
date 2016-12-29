@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns:aop="http://www.springframework.org/schema/aop"
+     xmlns:tx="http://www.springframework.org/schema/tx"
+     xmlns:jee="http://www.springframework.org/schema/jee"
+     xmlns:context="http://www.springframework.org/schema/context"
+     xmlns:security="http://www.springframework.org/schema/security"
+     xsi:schemaLocation="
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+     http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+     
+     <!-- 数据库配置 -->
+     <context:property-placeholder location="classpath:configs/*.properties" /> 
+     
+	 <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		init-method="init" destroy-method="close">
+		<property name="driverClassName" value="${JDBC_DRIVER_CLASS_NAME}"/>
+		<property name="url" value="${JDBC_URL}" />
+		<property name="username" value="${JDBC_USER}" />
+		<property name="password" value="${JDBC_PASSWORD}" />
+		<property name="filters" value="stat" />
+		<property name="maxActive" value="20" />
+		<property name="initialSize" value="5" />
+		<property name="maxWait" value="60000" />
+		<property name="minIdle" value="2" />
+		<property name="timeBetweenEvictionRunsMillis" value="3000" />
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+		<property name="validationQuery" value="SELECT 'x'" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+		<property name="poolPreparedStatements" value="true" />
+		<property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
+	</bean>
+      
+     <!-- 事务配置 -->
+     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    
+    
+    <!-- enable component scanning (beware that this does not enable mapper scanning!)
+   		  自动扫描指定的包下面的通过注解标识的组件，无需使用xml来定义spring的bean了
+     -->    
+    <context:component-scan base-package="com.baoduoduo.**.service" />
+
+    <!-- enable autowire 开启bean类的注解支持 （让 @Autowired等注解工作起来 ）-->
+    <context:annotation-config />
+
+
+    <!-- Mybatis工厂类配置 define the SqlSessionFactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean" autowire="byName">
+        <property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:configs/mybatis/mybatis-configuration.xml"/>
+		<property name="mapperLocations" value="classpath:configs/mapper/baoduoduo/*.xml" />
+    </bean>
+
+    <!-- 扫描Mybatis的Mapper组件 scan for mappers and let them be autowired -->
+    <!-- <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"> -->
+    <bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.baoduoduo.db.mapper" />
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+    </bean>
+    
+    <aop:config>
+        <aop:advisor advice-ref="txAdvice" pointcut="execution(* com.baoduoduo..service..*.*(..))" />
+    </aop:config>
+    
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="select*" read-only="true"/>
+            <tx:method name="find*" read-only="true"/>
+            <tx:method name="get*" read-only="true"/>
+            <tx:method name="query*" read-only="true"/>
+            <tx:method name="*"/>
+        </tx:attributes>
+    </tx:advice> 
+   
+   <!-- enable transaction demarcation with annotations 开启通过注解标识事务功能 -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    
+    <!-- 谷歌验证码 --> 
+    <bean id="captchaProducer" class="com.google.code.kaptcha.impl.DefaultKaptcha">  
+        <property name="config">  
+            <bean class="com.google.code.kaptcha.util.Config">  
+                <constructor-arg>  
+                    <props>  
+                        <prop key="kaptcha.border">yes</prop>  
+                        <prop key="kaptcha.border.color">105,179,90</prop>  
+                        <prop key="kaptcha.textproducer.font.color">blue</prop>
+                        <prop key="kaptcha.noise.color">blue</prop>
+                        <prop key="kaptcha.image.width">100</prop> 
+                        <prop key="kaptcha.image.height">40</prop>
+                        <prop key="kaptcha.textproducer.impl">com.google.code.kaptcha.text.impl.DefaultTextCreator</prop>
+                        <prop key="kaptcha.noise.impl">com.google.code.kaptcha.impl.NoNoise</prop>
+                        <prop key="kaptcha.obscurificator.impl">com.google.code.kaptcha.impl.WaterRipple</prop>
+                        <prop key="kaptcha.textproducer.font.size">32</prop>  
+                        <prop key="kaptcha.textproducer.char.length">4</prop>  
+                    </props>  
+                </constructor-arg>  
+            </bean>  
+        </property>  
+    </bean>
+</beans>

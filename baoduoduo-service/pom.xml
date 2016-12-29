@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.baoduoduo-root</groupId>
+    <artifactId>baoduoduo-root</artifactId>
+    <version>0.0.1</version>
+  </parent>
+  <groupId>com.baoduoduo</groupId>
+  <artifactId>baoduoduo-service</artifactId>
+  <name>baoduoduo-service</name>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    
+     <dependency>
+    	<groupId>com.baoduoduo</groupId>
+    	<artifactId>baoduoduo-db</artifactId>
+    	<version>${project.version}</version>
+    </dependency>
+    
+    
+    <dependency>
+    	<groupId>com.xiaoniu</groupId>
+    	<artifactId>common</artifactId>
+    	<version>1.0.0</version>
+    </dependency>
+    
+	<dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-context</artifactId>
+	    <version>${spring.version}</version>
+	</dependency>
+    
+  </dependencies>
+</project>
